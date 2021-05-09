@@ -34,9 +34,12 @@ Plug 'morhetz/gruvbox'
 Plug 'preservim/nerdtree'
 map <silent><F8> :NERDTree<CR>
 
-"Plug '/usr/bin/fzf'
 
-set rtp+=/usr/local/opt/fzf
+if has('mac')
+	set rtp+=/usr/local/opt/fzf
+elseif has('unix')
+	set rtp+=/usr/bin/fzf
+endif
 
 Plug 'junegunn/fzf.vim'
 map <c-o> :Buffers<CR>
@@ -49,6 +52,7 @@ Plug 'Lokaltog/vim-easymotion'
 Plug 'editorconfig/editorconfig-vim'
 
 Plug 'vim-airline/vim-airline'
+let g:airline_powerline_fonts = 1
 
 " :Renamer
 Plug 'vim-scripts/renamer.vim'
@@ -69,7 +73,7 @@ Plug 'nathanaelkane/vim-indent-guides'
 " indent guides shortcut
 map <silent><F7>  <leader>ig
 
-
+" nginx syntax highlighting
 Plug 'chr4/nginx.vim'
 
 " markdown support
@@ -80,15 +84,13 @@ let g:vim_markdown_folding_disabled = 1
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 " Plug 'ianding1/leetcode.vim'
-
-let g:leetcode_china = 1
-let g:leetcode_solution_filetype = 'golang'
+"let g:leetcode_china = 1
+"let g:leetcode_solution_filetype = 'golang'
+"let g:leetcode_browser = 'firefox'
 " let g:leetcode_browser = 'disable'
-let g:leetcode_browser = 'firefox'
 " let g:leetcode_browser = 'chrome'
 
 "Plug 'ryanoasis/vim-devicons'
-let g:airline_powerline_fonts = 1
 "let g:webdevicons_enable_nerdtree = 1
 "let g:webdevicons_conceal_nerdtree_brackets = 1
 "set guifont=DroidSansMono\ Nerd\ Font\ 11

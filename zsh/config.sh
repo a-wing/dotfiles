@@ -4,6 +4,9 @@
 unsetopt flowcontrol
 stty -ixon
 
+# brew --prefix fzf
+# source $(brew --prefix fzf)/shell/completion.zsh
+# source $(brew --prefix fzf)/shell/key-bindings.zsh
 source /usr/local/opt/fzf/shell/completion.zsh
 source /usr/local/opt/fzf/shell/key-bindings.zsh
 # CTRL-R - Paste the selected command from history into the command line
@@ -64,6 +67,66 @@ bindkey '^S'  quick-sudo-widget
 bindkey '^Q' push-line-or-edit
 bindkey '^[Q' push-line-or-edit
 bindkey '^[q' push-line-or-edit
+
+# Frok from: https://github.com/jarun/nnn/blob/master/misc/quitcd/quitcd.bash_zsh
+nnn_cd () {
+  # Block nesting of nnn in subshells
+  if [ -n $NNNLVL ] && [ "${NNNLVL:-0}" -ge 1 ]; then
+    echo "nnn is already running"
+    return
+  fi
+
+  # The default behaviour is to cd on quit (nnn checks if NNN_TMPFILE is set)
+  # To cd on quit only on ^G, remove the "export" as in:
+  #     NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
+  # NOTE: NNN_TMPFILE is fixed, should not be modified
+  export NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
+
+  # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
+  # stty start undef
+  # stty stop undef
+  # stty lwrap undef
+  # stty lnext undef
+
+  nnn "$@"
+
+  if [ -f "$NNN_TMPFILE" ]; then
+    . "$NNN_TMPFILE"
+    rm -f "$NNN_TMPFILE" > /dev/null
+  fi
+}
+
+#bindkey -s '^N' 'nnn_cd\n'
+
+
+# Fork from: https://github.com/ranger/ranger/blob/master/examples/shell_automatic_cd.sh
+ranger_cd() {
+  local temp_file="$(mktemp -t "ranger_cd.${USERNAME}")"
+  ranger --choosedir="$temp_file" -- "${@:-$PWD}"
+  if chosen_dir="$(cat -- "$temp_file")" && [ -n "$chosen_dir" ] && [ "$chosen_dir" != "$PWD" ]; then
+    cd -- "$chosen_dir"
+  fi
+  rm -f -- "$temp_file"
+}
+
+# This binds Ctrl-O to ranger_cd:
+#bindkey -s '^O' 'ranger_cd\n'
+bindkey -s '^N' 'ranger_cd\n'
+
+
+
+# Load path
+_enabled_paths=(
+  'go/bin'
+  '.bin'
+  '.local/bin'
+  '.cargo/bin'
+)
+
+for _enabled_path in $_enabled_paths[@]; do
+  [[ -d "$HOME/${_enabled_path}" ]] && PATH="$HOME/${_enabled_path}:$PATH"
+done
+
 
 # Frok from: https://github.com/ohmyzsh/ohmyzsh/blob/71cc861806f30d8f7fd3d0040db86737cab62581/lib/directories.zsh
 alias -g ...='../..'

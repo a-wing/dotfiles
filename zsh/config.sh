@@ -1,4 +1,9 @@
 
+# Disable flowcontrol
+# unset Ctrl-S && Ctrl-Q
+unsetopt flowcontrol
+stty -ixon
+
 source /usr/local/opt/fzf/shell/completion.zsh
 source /usr/local/opt/fzf/shell/key-bindings.zsh
 # CTRL-R - Paste the selected command from history into the command line
@@ -52,14 +57,13 @@ quick-sudo-widget() {
 }
 
 zle     -N    quick-sudo-widget
+bindkey '^S'  quick-sudo-widget
 
-# Default ALT-S, For Mac OS: Option-S
-if [[ `uname` == "Darwin" ]]; then
-  bindkey 'ß' quick-sudo-widget
-else
-  bindkey '\es' quick-sudo-widget
-fi
-
+# Ctrl-Q, heredoc
+# bindkey '^Q' push-line
+bindkey '^Q' push-line-or-edit
+bindkey '^[Q' push-line-or-edit
+bindkey '^[q' push-line-or-edit
 
 # Frok from: https://github.com/ohmyzsh/ohmyzsh/blob/71cc861806f30d8f7fd3d0040db86737cab62581/lib/directories.zsh
 alias -g ...='../..'

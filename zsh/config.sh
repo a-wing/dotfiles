@@ -4,11 +4,24 @@
 unsetopt flowcontrol
 stty -ixon
 
-# brew --prefix fzf
-# source $(brew --prefix fzf)/shell/completion.zsh
-# source $(brew --prefix fzf)/shell/key-bindings.zsh
-source /usr/local/opt/fzf/shell/completion.zsh
-source /usr/local/opt/fzf/shell/key-bindings.zsh
+
+# bindkey '\eq' push-line
+# Need support heredoc
+bindkey '\eq' push-line-or-edit
+
+# FZF Plugin
+if [[ `uname` == "Darwin" ]]; then
+  # brew --prefix fzf
+  # source $(brew --prefix fzf)/shell/completion.zsh
+  # source $(brew --prefix fzf)/shell/key-bindings.zsh
+  _FZF_PLUGINS=${_FZF_PLUGINS:="/usr/local/opt/fzf/shell"}
+else
+  _FZF_PLUGINS=${_FZF_PLUGINS:="/usr/share/fzf"}
+fi
+
+source $_FZF_PLUGINS/key-bindings.zsh
+source $_FZF_PLUGINS/completion.zsh
+
 # CTRL-R - Paste the selected command from history into the command line
 # CTRL-T - Paste the selected file path(s) into the command line
 # ALT-C - cd into the selected directory
@@ -101,7 +114,7 @@ nnn_cd () {
 
 # Fork from: https://github.com/ranger/ranger/blob/master/examples/shell_automatic_cd.sh
 ranger_cd() {
-  local temp_file="$(mktemp -t "ranger_cd.${USERNAME}")"
+  local temp_file="$(mktemp -t "ranger_cd.XXXXXXXXXX.${USERNAME}")"
   ranger --choosedir="$temp_file" -- "${@:-$PWD}"
   if chosen_dir="$(cat -- "$temp_file")" && [ -n "$chosen_dir" ] && [ "$chosen_dir" != "$PWD" ]; then
     cd -- "$chosen_dir"

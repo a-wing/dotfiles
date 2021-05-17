@@ -61,11 +61,14 @@ else
 fi
 
 quick-sudo-widget() {
+  [[ -z $BUFFER ]] && zle up-history
   local cmd="sudo "
-  if [[ ${LBUFFER:0:${#cmd}} == ${cmd} ]]; then
-    LBUFFER="${LBUFFER:${#cmd}}"
+  if [[ ${BUFFER:0:${#cmd}} == ${cmd} ]]; then
+    CURSOR=$(( CURSOR-${#cmd} ))
+    BUFFER="${BUFFER:${#cmd}}"
   else
-    LBUFFER="${cmd}${LBUFFER}"
+    BUFFER="${cmd}${BUFFER}"
+    CURSOR=$(( CURSOR+${#cmd} ))
   fi
   local ret=$?
   zle reset-prompt

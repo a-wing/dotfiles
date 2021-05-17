@@ -70,9 +70,7 @@ quick-sudo-widget() {
     BUFFER="${cmd}${BUFFER}"
     CURSOR=$(( CURSOR+${#cmd} ))
   fi
-  local ret=$?
   zle reset-prompt
-  return $ret
 }
 
 zle     -N    quick-sudo-widget

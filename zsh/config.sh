@@ -60,12 +60,13 @@ else
   bindkey '\ex' fzf-dirs-widget
 fi
 
+# https://github.com/grml/grml-etc-core/pull/119
 quick-sudo-widget() {
   [[ -z $BUFFER ]] && zle up-history
   local cmd="sudo "
-  if [[ ${BUFFER:0:${#cmd}} == ${cmd} ]]; then
+  if [[ ${BUFFER} == ${cmd}* ]]; then
     CURSOR=$(( CURSOR-${#cmd} ))
-    BUFFER="${BUFFER:${#cmd}}"
+    BUFFER="${BUFFER#$cmd}"
   else
     BUFFER="${cmd}${BUFFER}"
     CURSOR=$(( CURSOR+${#cmd} ))

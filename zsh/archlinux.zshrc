@@ -7,22 +7,10 @@ autoload -Uz promptinit
 promptinit
 
 # Set Theme
-#prompt adam2
+# http://bewatermyfriend.org/p/2013/001/
+zstyle ':prompt:grml:left:setup' items rc change-root user at host path vcs newline percent
 
-
-# prompt grml
-# Use two lines prompt
-function prompt_grml_precmd () {
-    emulate -L zsh
-    local grmltheme=grml
-    local -a left_items right_items
-    left_items=(rc change-root user at host path vcs newline percent)
-    right_items=(sad-smiley)
-
-    prompt_grml_precmd_worker
-}
-
-prompt_grml_precmd
+prompt grml
 
 
 # Load Plugins

@@ -61,7 +61,7 @@ else
 fi
 
 # https://github.com/grml/grml-etc-core/pull/119
-quick-sudo-widget() {
+sudo-command-line() {
   [[ -z $BUFFER ]] && zle up-history
   local cmd="sudo "
   if [[ ${BUFFER} == ${cmd}* ]]; then
@@ -74,8 +74,8 @@ quick-sudo-widget() {
   zle reset-prompt
 }
 
-zle     -N    quick-sudo-widget
-bindkey '^S'  quick-sudo-widget
+zle     -N    sudo-command-line
+bindkey '^S'  sudo-command-line
 
 # Ctrl-Q, heredoc
 # bindkey '^Q' push-line

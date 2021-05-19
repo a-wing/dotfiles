@@ -18,11 +18,16 @@ _ZSH_PLUGINS="/usr/share/zsh/plugins"
 _enabled_plugins=(
 	zsh-autosuggestions
 	zsh-syntax-highlighting
+	zsh-history-substring-search
 )
 
 for _zsh_plugin in $_enabled_plugins[@]; do
   [[ ! -r "$_ZSH_PLUGINS/$_zsh_plugin/$_zsh_plugin.zsh" ]] || source $_ZSH_PLUGINS/$_zsh_plugin/$_zsh_plugin.zsh
 done
+
+# zsh-history-substring-search
+bindkey "^[OA" history-substring-search-up
+bindkey "^[OB" history-substring-search-down
 
 source ~/dotfiles/zsh/config.sh
 

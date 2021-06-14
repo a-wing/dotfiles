@@ -60,23 +60,22 @@ else
   bindkey '\ex' fzf-dirs-widget
 fi
 
-quick-sudo-widget() {
+# https://github.com/grml/grml-etc-core/pull/119
+sudo-command-line() {
   [[ -z $BUFFER ]] && zle up-history
   local cmd="sudo "
-  if [[ ${BUFFER:0:${#cmd}} == ${cmd} ]]; then
+  if [[ ${BUFFER} == ${cmd}* ]]; then
     CURSOR=$(( CURSOR-${#cmd} ))
-    BUFFER="${BUFFER:${#cmd}}"
+    BUFFER="${BUFFER#$cmd}"
   else
     BUFFER="${cmd}${BUFFER}"
     CURSOR=$(( CURSOR+${#cmd} ))
   fi
-  local ret=$?
   zle reset-prompt
-  return $ret
 }
 
-zle     -N    quick-sudo-widget
-bindkey '^S'  quick-sudo-widget
+zle     -N    sudo-command-line
+bindkey '^S'  sudo-command-line
 
 # Ctrl-Q, heredoc
 # bindkey '^Q' push-line

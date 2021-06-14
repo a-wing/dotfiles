@@ -73,6 +73,13 @@ Plug 'nathanaelkane/vim-indent-guides'
 " indent guides shortcut
 map <silent><F7>  <leader>ig
 
+" tsx
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+
+" Vim syntax for TOML
+Plug 'cespare/vim-toml'
+
 " nginx syntax highlighting
 Plug 'chr4/nginx.vim'
 
@@ -117,7 +124,7 @@ nnoremap ? :let @/ = ""<CR>:call gruvbox#hls_show()<CR>?
 hi Normal ctermfg=252 ctermbg=none
 
 " Coc
-let g:coc_global_extensions = ['coc-tabnine', 'coc-snippets', 'coc-json', 'coc-css', 'coc-css', 'coc-go', 'coc-python', 'coc-solargraph', 'coc-markdownlint']
+let g:coc_global_extensions = ['coc-tabnine', 'coc-snippets', 'coc-json', 'coc-css', 'coc-tsserver', 'coc-go', 'coc-toml', 'coc-python', 'coc-solargraph', 'coc-markdownlint']
 
 " TextEdit might fail if hidden is not set.
 set hidden

@@ -67,6 +67,9 @@ let g:vmt_auto_update_on_save = 0
 Plug 'posva/vim-vue'
 au BufNewFile,BufRead *.vue setf vue
 
+" slim
+Plug 'slim-template/vim-slim'
+
 " indent guides
 let g:indent_guides_guide_size = 1
 Plug 'nathanaelkane/vim-indent-guides'
@@ -89,6 +92,9 @@ Plug 'plasticboy/vim-markdown'
 let g:vim_markdown_folding_disabled = 1
 " markdown preview
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+
+Plug 'APZelos/blamer.nvim'
+map <silent><F9> :BlamerToggle<CR>
 
 " Plug 'ianding1/leetcode.vim'
 "let g:leetcode_china = 1

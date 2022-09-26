@@ -35,7 +35,9 @@ Plug 'preservim/nerdtree'
 map <silent><F8> :NERDTree<CR>
 
 
-if has('mac')
+if has('mac') && system('arch') == "arm64"
+	set rtp+=/opt/homebrew/opt/fzf
+elseif has('mac')
 	set rtp+=/usr/local/opt/fzf
 elseif has('unix')
 	set rtp+=/usr/bin/fzf
@@ -130,7 +132,7 @@ nnoremap ? :let @/ = ""<CR>:call gruvbox#hls_show()<CR>?
 hi Normal ctermfg=252 ctermbg=none
 
 " Coc
-let g:coc_global_extensions = ['coc-tabnine', 'coc-snippets', 'coc-json', 'coc-css', 'coc-tsserver', 'coc-go', 'coc-toml', 'coc-python', 'coc-solargraph', 'coc-markdownlint', 'coc-rust-analyzer']
+let g:coc_global_extensions = ['coc-tabnine', 'coc-json', 'coc-css', 'coc-tsserver', 'coc-go', 'coc-toml', 'coc-python', 'coc-solargraph', 'coc-markdownlint', 'coc-rust-analyzer']
 
 " TextEdit might fail if hidden is not set.
 set hidden

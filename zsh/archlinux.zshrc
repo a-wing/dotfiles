@@ -6,6 +6,8 @@
 autoload -Uz promptinit
 promptinit
 
+zstyle ':completion:*:*:*:*:*' menu select
+
 # Set Theme
 # http://bewatermyfriend.org/p/2013/001/
 zstyle ':prompt:grml:left:setup' items rc change-root user at host path vcs newline percent
@@ -31,3 +33,6 @@ bindkey "^[OB" history-substring-search-down
 
 source ~/dotfiles/zsh/config.sh
 
+alias vim=nvim
+
+source /home/metal/.config/broot/launcher/bash/br

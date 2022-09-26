@@ -16,10 +16,14 @@
 
 ## Common
 
+```bash
+ln -s ~/dotfiles/zsh/config.sh ~/.zshrc
+```
+
 ### Depend
 
+* grml-zsh-config
 * fzf
-* zimfw (opt)
 * sudo (opt)
 
 ### Install

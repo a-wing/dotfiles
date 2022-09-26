@@ -1,3 +1,47 @@
+# wget -O ~/.zshrc.grml https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
+# source ${HOME}/Code/grml-etc-core/etc/zsh/zshrc
+if [[ -f "${HOME}/.zshrc.grml" ]]; then
+	source "${HOME}/.zshrc.grml"
+fi
+
+# Set Theme
+# http://bewatermyfriend.org/p/2013/001/
+if [[ -z "${SSH_TTY}" ]]; then
+	zstyle ':prompt:grml:left:setup' items rc change-root path vcs newline percent
+else
+	zstyle ':prompt:grml:left:setup' items rc change-root user at host path vcs newline percent
+fi
+
+prompt grml
+
+
+# Configuring Completions
+autoload -Uz promptinit
+promptinit
+
+zstyle ':completion:*' menu select
+
+# Load Plugins
+_ZSH_PLUGINS="/usr/share/zsh/plugins"
+if [[ -f "`which brew`" ]]; then
+	_ZSH_PLUGINS="$(brew --prefix)/share"
+fi
+
+_enabled_plugins=(
+	zsh-autosuggestions
+	zsh-syntax-highlighting
+	zsh-history-substring-search
+)
+
+for _zsh_plugin in $_enabled_plugins[@]; do
+  [[ ! -r "$_ZSH_PLUGINS/$_zsh_plugin/$_zsh_plugin.zsh" ]] || source $_ZSH_PLUGINS/$_zsh_plugin/$_zsh_plugin.zsh
+done
+
+# zsh-history-substring-search
+bindkey "^[OA" history-substring-search-up
+bindkey "^[OB" history-substring-search-down
+
+alias vim=nvim
 
 # Disable flowcontrol
 # unset Ctrl-S && Ctrl-Q
@@ -9,12 +53,19 @@ stty -ixon
 # Need support heredoc
 bindkey '\eq' push-line-or-edit
 
-# FZF Plugin
+# Ctrl-Q, heredoc
+# bindkey '^Q' push-line
+bindkey '^Q' push-line-or-edit
+bindkey '^[Q' push-line-or-edit
+bindkey '^[q' push-line-or-edit
+
+zle     -N    sudo-command-line
+bindkey '^S'  sudo-command-line
+
+# === FZF Plugin ===
 if [[ `uname` == "Darwin" ]]; then
   # brew --prefix fzf
-  # source $(brew --prefix fzf)/shell/completion.zsh
-  # source $(brew --prefix fzf)/shell/key-bindings.zsh
-  _FZF_PLUGINS=${_FZF_PLUGINS:="/usr/local/opt/fzf/shell"}
+  _FZF_PLUGINS=${_FZF_PLUGINS:="$(brew --prefix fzf)/shell"}
 else
   _FZF_PLUGINS=${_FZF_PLUGINS:="/usr/share/fzf"}
 fi
@@ -60,74 +111,7 @@ else
   bindkey '\ex' fzf-dirs-widget
 fi
 
-# https://github.com/grml/grml-etc-core/pull/119
-sudo-command-line() {
-  [[ -z $BUFFER ]] && zle up-history
-  local cmd="sudo "
-  if [[ ${BUFFER} == ${cmd}* ]]; then
-    CURSOR=$(( CURSOR-${#cmd} ))
-    BUFFER="${BUFFER#$cmd}"
-  else
-    BUFFER="${cmd}${BUFFER}"
-    CURSOR=$(( CURSOR+${#cmd} ))
-  fi
-  zle reset-prompt
-}
-
-zle     -N    sudo-command-line
-bindkey '^S'  sudo-command-line
-
-# Ctrl-Q, heredoc
-# bindkey '^Q' push-line
-bindkey '^Q' push-line-or-edit
-bindkey '^[Q' push-line-or-edit
-bindkey '^[q' push-line-or-edit
-
-# Frok from: https://github.com/jarun/nnn/blob/master/misc/quitcd/quitcd.bash_zsh
-nnn_cd () {
-  # Block nesting of nnn in subshells
-  if [ -n $NNNLVL ] && [ "${NNNLVL:-0}" -ge 1 ]; then
-    echo "nnn is already running"
-    return
-  fi
-
-  # The default behaviour is to cd on quit (nnn checks if NNN_TMPFILE is set)
-  # To cd on quit only on ^G, remove the "export" as in:
-  #     NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
-  # NOTE: NNN_TMPFILE is fixed, should not be modified
-  export NNN_TMPFILE="${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.lastd"
-
-  # Unmask ^Q (, ^V etc.) (if required, see `stty -a`) to Quit nnn
-  # stty start undef
-  # stty stop undef
-  # stty lwrap undef
-  # stty lnext undef
-
-  nnn "$@"
-
-  if [ -f "$NNN_TMPFILE" ]; then
-    . "$NNN_TMPFILE"
-    rm -f "$NNN_TMPFILE" > /dev/null
-  fi
-}
-
-#bindkey -s '^N' 'nnn_cd\n'
-
-
-# Fork from: https://github.com/ranger/ranger/blob/master/examples/shell_automatic_cd.sh
-ranger_cd() {
-  local temp_file="$(mktemp -t "ranger_cd.XXXXXXXXXX.${USERNAME}")"
-  ranger --choosedir="$temp_file" -- "${@:-$PWD}"
-  if chosen_dir="$(cat -- "$temp_file")" && [ -n "$chosen_dir" ] && [ "$chosen_dir" != "$PWD" ]; then
-    cd -- "$chosen_dir"
-  fi
-  rm -f -- "$temp_file"
-}
-
-# This binds Ctrl-O to ranger_cd:
-#bindkey -s '^O' 'ranger_cd\n'
-bindkey -s '^N' 'ranger_cd\n'
-
+# === FZF Plugin ===
 
 
 # Load path
@@ -150,7 +134,7 @@ alias -g ....='../../..'
 #alias -- -='cd -'
 alias 1='cd -'
 alias 2='cd -2'
-#alias 3='cd -3'
+alias 3='cd -3'
 
 # https://docs.brew.sh/Shell-Completion
 if type brew &>/dev/null; then
@@ -168,10 +152,6 @@ fi
 if [[ -d "${HOME}/.zsh-completions" ]]; then
 	FPATH=${HOME}/.zsh-completions:$FPATH
 fi
-
-#autoload -Uz compinit
-#compinit
-
 
 export EDITOR='nvim'
 export VISUAL='nvim'

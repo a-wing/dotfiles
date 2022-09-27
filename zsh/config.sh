@@ -1,8 +1,30 @@
+
+# https://docs.brew.sh/Shell-Completion
+#if type brew &>/dev/null; then
+#	FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+#fi
+
+### nerdctl
+# ln -s `which nerdctl.lima` ~/.bin/nerdctl
+# nerdctl completion zsh > ~/.zsh-completions/_nerdctl
+
+if [[ -d "${HOME}/.zsh-completions" ]]; then
+	FPATH="${HOME}/.zsh-completions:${FPATH}"
+fi
+
+# Configuring Completions
+# Grml is enabled promptinit, not set
+# autoload -Uz promptinit; promptinit
+
 # wget -O ~/.zshrc.grml https://git.grml.org/f/grml-etc-core/etc/zsh/zshrc
 # source ${HOME}/Code/grml-etc-core/etc/zsh/zshrc
 if [[ -f "${HOME}/.zshrc.grml" ]]; then
 	source "${HOME}/.zshrc.grml"
 fi
+
+# Set few items style
+zstyle ':completion:*' menu select
+
 
 # Set Theme
 # http://bewatermyfriend.org/p/2013/001/
@@ -14,12 +36,6 @@ fi
 
 prompt grml
 
-
-# Configuring Completions
-autoload -Uz promptinit
-promptinit
-
-zstyle ':completion:*' menu select
 
 # Load Plugins
 _ZSH_PLUGINS="/usr/share/zsh/plugins"
@@ -135,23 +151,6 @@ alias -g ....='../../..'
 alias 1='cd -'
 alias 2='cd -2'
 alias 3='cd -3'
-
-# https://docs.brew.sh/Shell-Completion
-if type brew &>/dev/null; then
-	FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
-fi
-
-# This completion so slow
-# source <(kubectl completion zsh)
-#if command kubectl > /dev/null; then
-#	#source <(kubectl completion zsh)
-#	source ~/.zsh-completions/_kubectl.zsh
-#fi
-
-# kubectl completion zsh > ~/.zsh-completions/_kubectl.zsh
-if [[ -d "${HOME}/.zsh-completions" ]]; then
-	FPATH=${HOME}/.zsh-completions:$FPATH
-fi
 
 export EDITOR='nvim'
 export VISUAL='nvim'

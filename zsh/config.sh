@@ -22,6 +22,15 @@ if [[ -f "${HOME}/.zshrc.grml" ]]; then
 	source "${HOME}/.zshrc.grml"
 fi
 
+### bash_completion
+autoload -U +X bashcompinit && bashcompinit
+
+# only `wg`, note: `wg-quick` must bash
+source $(brew --prefix)/etc/bash_completion.d/wg
+
+# Disable completion ignore case
+zstyle ':completion:*' matcher-list 'm:{a-z}!={A-Z}'
+
 # Set few items style
 zstyle ':completion:*' menu select
 

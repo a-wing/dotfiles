@@ -4,6 +4,8 @@ set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 
+set mouse=
+
 " diffsplit vertical
 " https://stackoverflow.com/questions/5682759/how-do-i-toggle-between-a-vertical-and-a-horizontal-split-in-vimdiff
 set diffopt+=vertical
@@ -95,7 +97,13 @@ let g:vim_markdown_folding_disabled = 1
 " markdown preview
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
+" git blame
 Plug 'APZelos/blamer.nvim'
+
+" replace, auto deal upcase and downcase
+" '%S/aaa/bbb/g' instead of '%s/aaa/bbb/g'
+Plug 'tpope/vim-abolish'
+
 map <silent><F9> :BlamerToggle<CR>
 
 " Plug 'ianding1/leetcode.vim'

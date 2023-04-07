@@ -25,8 +25,10 @@ fi
 ### bash_completion
 autoload -U +X bashcompinit && bashcompinit
 
-# only `wg`, note: `wg-quick` must bash
-source $(brew --prefix)/etc/bash_completion.d/wg
+if [[ -f "`which brew`" ]]; then
+  # only `wg`, note: `wg-quick` must bash
+  source $(brew --prefix)/etc/bash_completion.d/wg
+fi
 
 # Disable completion ignore case
 zstyle ':completion:*' matcher-list 'm:{a-z}!={A-Z}'
@@ -146,6 +148,10 @@ _enabled_paths=(
   '.local/bin'
   '.cargo/bin'
 )
+
+if [[ -f "`which brew`" ]]; then
+  arrVar+=("Library/Python/3.9/bin")
+fi
 
 for _enabled_path in $_enabled_paths[@]; do
   [[ -d "$HOME/${_enabled_path}" ]] && PATH="$HOME/${_enabled_path}:$PATH"

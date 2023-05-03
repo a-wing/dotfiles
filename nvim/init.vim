@@ -74,6 +74,9 @@ au BufNewFile,BufRead *.vue setf vue
 " slim
 Plug 'slim-template/vim-slim'
 
+" ejs
+Plug 'nikvdp/ejs-syntax'
+
 " indent guides
 let g:indent_guides_guide_size = 1
 Plug 'nathanaelkane/vim-indent-guides'
